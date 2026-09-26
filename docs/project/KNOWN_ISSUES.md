@@ -6,7 +6,6 @@ Active bugs and investigations only. Priorities reflect the current roadmap; cau
 
 | Priority | Issue | Investigation context |
 |---|---|---|
-| P1 | Notifications do not appear. | User confirmed; the audit found no separate notification daemon running. Determine the intended infrastructure and then provide a useful notification center. |
 | P1 | Hardware keyboard-backlight changes have no visible OSD, although the backlight changes. | SwayOSD and the Dell LED-watching daemon ran in the audit. Event delivery and display were not exercised there; diagnose the full path. |
 
 ## Audit findings and open investigations
