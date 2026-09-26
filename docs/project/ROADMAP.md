@@ -16,6 +16,8 @@
 | J — Verification | Reboot, login/logout, suspend/resume, networking, Bluetooth, audio and hardware end-to-end checks. | Confirm the mature desktop on this machine before portability claims. |
 | K — Reproduction | Canonical config layout, package manifest, machine abstraction and installation/bootstrap system. | Begin only after the desktop is mature and verified; exclude private state and generated outputs. |
 
+Stage C's future rich notification pass should evaluate and, where supported by the sending application and protocol, implement default action/click-to-open, richer actions, inline replies, images/avatars, categories and appropriate presentation, and urgency-aware presentation. It should also cover a notification center/history, DND, clear-one/clear-all, a bell/count entry point, multi-monitor behavior, and a persistence/history policy. These are planned capabilities, not unresolved Task 003 stability bugs.
+
 ## Workflow requirements to carry forward
 
 - Command Center hierarchy: Applications (install Arch/CachyOS, AUR, Flatpak or Web App; remove; update), Desktop (wallpaper, appearance, display), Utilities (screenshot, recording, emoji, keybindings), and System actions/diagnostics as needed.
