@@ -1,11 +1,11 @@
 # Roadmap
 
-**Current stage: A — Critical stability.** First engineering repair: the logout black screen. Preserve the currently working boot-to-Hyprland path while investigating it. Stages express dependency and intent, not completion claims or a detailed issue tracker. Validate changes on the current machine before advancing. See [Known Issues](KNOWN_ISSUES.md) for active faults and [Current State](CURRENT_STATE.md) for the evidence baseline.
+**Current stage: B — UI foundation (in progress).** Stage A critical stability is complete. The first verified Stage B slice connects the Matugen raw palette to a Quickshell semantic Theme singleton, an opt-in shared panel surface, and Battery as its first representative consumer. Stages express dependency and intent, not completion claims or a detailed issue tracker. Validate changes on the current machine before advancing. See [Known Issues](KNOWN_ISSUES.md) for active faults and [Current State](CURRENT_STATE.md) for the evidence baseline.
 
 | Stage | Outcome | Key dependency or boundary |
 |---|---|---|
 | A — Critical stability | Repair logout, establish visible notifications, restore keyboard-backlight OSD. | Prove session transitions safely; working autologin does not prove greeter behavior. |
-| B — UI foundation | Shared Quickshell primitives/tokens and coherent Matugen color integration. | Resolve active Omarchy color fallback and theming source before broad UI rewrites. |
+| B — UI foundation | Shared Quickshell primitives/tokens and coherent Matugen color integration. | Extend the verified semantic theme path incrementally; migrate legacy color consumers before broad UI rewrites. |
 | C — Core desktop UI | Interactive month calendar, redesigned battery panel, coherent tray context menus, notification center. | Build on B; retain useful actions and information. |
 | D — System Command Center | Super+Alt+Space hierarchy and extensible action entry point. | Keep Super+Space for applications; integrate underlying tools without forcing one UI technology. |
 | E — System tools | Package install/remove/update for Arch/CachyOS, AUR and Flatpak; wallpaper picker; clean DNS switching. | Expose through D; investigate existing DNS behavior before replacing it. |
