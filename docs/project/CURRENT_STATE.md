@@ -25,10 +25,15 @@ This is a living summary of the [frozen forensic audit](../audit/SYSTEM_AUDIT.md
 - Basic top-right toasts were manually verified on this machine's one active internal display, including application name, summary, plain-text body and dismissal. Action labels and invocation were manually verified. Runtime checks covered empty bodies, missing icons, timeout behavior, critical and zero-timeout retention, replacement and remote close. At most three cards appear at once; a fourth tracked notification appeared when a visible card was dismissed.
 - `keepOnReload` was manually verified across a real configuration reload: one persistent notification survived exactly once and remained dismissible. Action hover contrast and a movement artifact were found, repaired and manually rechecked. Process-restart persistence is not provided or verified. A notification center, durable history, DND, image rendering, inline replies, final shared styling/Matugen integration and sophisticated multi-monitor routing remain future work; multi-monitor behavior was not tested.
 
+## Keyboard-backlight OSD verified after the audit
+
+- Task 004 verified the live keyboard-backlight OSD path on `/sys/class/leds/dell::kbd_backlight` (maximum brightness 2). F5 changes the physical keyboard light and the Dell LED state. Its hardware change event arrives on `brightness_hw_changed`; the personal watcher previously waited on `brightness` and did not wake for real key presses.
+- The repaired `personal-kbd-osd-daemon` waits on `brightness_hw_changed` and reads the current level from `brightness`. It retains the existing `swayosd-client` keyboard icon and segmented-progress command and the existing `swayosd-server`. Manual end-to-end testing confirmed that F5 changes the light, displays the OSD, and shows levels matching the half-lit and off states. Post-test checks found one watcher instance, idle between events rather than busy-polling.
+- The packaged `swayosd-libinput-backend.service` was not enabled or adopted, and SwayOSD's separate automatic keyboard-backlight path was not used for this repair. Whether firmware or kernel input handling initiates the physical change remains undetermined because the repair did not require it. The live watcher remains outside this repository until a canonical configuration and script layout is established.
+
 ## Configured, uncertain, or absent
 
 - Super+Space/Fuzzel, screenshot binds, panel IPC and other on-demand actions are configured; most were not triggered by the audit. Super+Escape/power-menu Logout and Quickshell notifications were subsequently tested as described above.
-- SwayOSD and a Dell keyboard LED watcher were running, but the user reports no visible OSD when the hardware backlight changes.
 - Active Quickshell color code references absent Omarchy theme paths. Its built-in fallback likely supplies colors; generated Matugen JSON is not proven to color active Quickshell panels. DNS helper paths conflict with a legacy Omarchy-named NetworkManager file; effective DNS behavior was not audited.
 - No canonical repo layout, Stow setup, or live-config symlink to this repository was found. The audit package inventory is not a future manifest. The local hardware/path assumptions and scripts need later intentionality and portability decisions; see the [Portability Matrix](../audit/PORTABILITY_MATRIX.md).
 

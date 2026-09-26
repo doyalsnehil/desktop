@@ -2,12 +2,6 @@
 
 Active bugs and investigations only. Priorities reflect the current roadmap; causes remain hypotheses until verified. Remove resolved entries from this living list and preserve any important resolution in appropriate project history. See the [frozen audit](../audit/SYSTEM_AUDIT.md) for baseline evidence.
 
-## Confirmed user-visible bugs
-
-| Priority | Issue | Investigation context |
-|---|---|---|
-| P1 | Hardware keyboard-backlight changes have no visible OSD, although the backlight changes. | SwayOSD and the Dell LED-watching daemon ran in the audit. Event delivery and display were not exercised there; diagnose the full path. |
-
 ## Audit findings and open investigations
 
 | Priority | Finding | Evidence limit / next question |
