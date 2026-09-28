@@ -1,6 +1,6 @@
 # Roadmap
 
-**Current stage: B — UI foundation (in progress).** Stage A critical stability is complete. Verified Stage B slices connect the Matugen raw palette to a Quickshell semantic Theme singleton, an opt-in shared panel surface, and an opt-in shared Button color mode used by Battery's power-profile buttons. Legacy consumers remain for incremental migration. Stages express dependency and intent, not completion claims or a detailed issue tracker. Validate changes on the current machine before advancing. See [Known Issues](KNOWN_ISSUES.md) for active faults and [Current State](CURRENT_STATE.md) for the evidence baseline.
+**Current stage: B — UI foundation (in progress).** Stage A critical stability is complete. Verified Stage B slices connect the Matugen raw palette to a Quickshell semantic Theme singleton, an opt-in shared panel surface, and an opt-in shared Button color mode used by Battery's power-profile buttons. Task 006 separately verified reactive Battery data correctness; the Battery visual redesign remains planned for Stage C. Legacy consumers remain for incremental migration. Stages express dependency and intent, not completion claims or a detailed issue tracker. Validate changes on the current machine before advancing. See [Known Issues](KNOWN_ISSUES.md) for active faults and [Current State](CURRENT_STATE.md) for the evidence baseline.
 
 | Stage | Outcome | Key dependency or boundary |
 |---|---|---|
