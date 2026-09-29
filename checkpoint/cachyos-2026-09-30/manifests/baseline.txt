@@ -1,0 +1,23 @@
+Captured: 2026-09-30T03:01:38+05:30
+Kernel: 7.2.8-1-cachyos
+Shell: /usr/bin/zsh
+Terminal: xterm-ghostty
+Session type: wayland
+Desktop: Hyprland
+Hyprland: Hyprland 0.56.2 built from branch v0.56.2 at commit efb50993780079460b0cbed1363e2166a2de1d9f clean ([gha] Nix: update inputs).
+Quickshell 0.3.1 (revision , distributed by Arch Linux)
+Waybar v0.15.0
+matugen 4.2.0
+awww 0.12.1
+swayosd 0.3.2-1.1
+sddm 0.21.0-8
+ghostty 1.3.1-2.2
+Quickshell PID: 1593
+Waybar PID: 1591
+Notification bus owner PID: 1593
+Git HEAD: 620e2591e7a51f257333aea91beba8ebe8b4d708
+Git status before checkpoint creation: clean (verified at 2026-09-30T02:58:20+05:30)
+CachyOS: rolling (/etc/os-release: NAME="CachyOS Linux", ID=cachyos, BUILD_ID=rolling)
+Hostname: linux
+Active display manager: sddm.service (running, enabled)
+Active session: plain Hyprland Wayland, not UWSM

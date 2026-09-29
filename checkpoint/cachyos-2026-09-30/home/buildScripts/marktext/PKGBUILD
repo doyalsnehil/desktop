@@ -1,0 +1,53 @@
+# Maintainer: snehil
+pkgname=marktext-bin
+pkgver=0.19.1
+pkgrel=1
+pkgdesc="Next-generation markdown editor, focused on speed and usability"
+arch=('x86_64')
+url="https://marktext.app"
+license=('MIT')
+
+depends=(
+    'alsa-lib'
+    'gtk3'
+    'libxss'
+    'nss'
+    'libnotify'
+    'libsecret'
+)
+makedepends=('libarchive')
+
+# Point source to your local deb filename (adjust filename below if needed)
+source=("local://marktext-linux-0.19.1.deb")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "$srcdir"
+    
+    # Extract the outer .deb archive
+    bsdtar -xf "marktext-linux-0.19.1.deb"
+    
+    # Unpack the data payload
+    mkdir -p payload
+    if [ -f data.tar.xz ]; then
+        bsdtar -xf data.tar.xz -C payload/
+    elif [ -f data.tar.zst ]; then
+        bsdtar -xf data.tar.zst -C payload/
+    elif [ -f data.tar.gz ]; then
+        bsdtar -xf data.tar.gz -C payload/
+    fi
+}
+
+package() {
+    # Copy extracted filesystem tree directly to Arch package root
+    cp -dr --no-preserve=ownership "$srcdir/payload/"* "$pkgdir/"
+
+    # Ensure executable permissions are intact
+    find "$pkgdir" -type d -exec chmod 755 {} +
+
+    # Ensure /usr/bin/marktext symlink exists if not included by deb
+    if [ -d "$pkgdir/opt/marktext" ] && [ ! -f "$pkgdir/usr/bin/marktext" ]; then
+        install -d "$pkgdir/usr/bin"
+        ln -sf /opt/marktext/marktext "$pkgdir/usr/bin/marktext"
+    fi
+}

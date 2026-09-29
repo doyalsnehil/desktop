@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Fuzzel Power Menu
+chosen=$(echo -e " Shutdown\n Reboot\n Lock\n Logout\n Suspend" | fuzzel -d -p "Power Menu ❯ " --lines=5 --width=20)
+
+case "$chosen" in
+    *"Shutdown") systemctl poweroff ;;
+    *"Reboot") systemctl reboot ;;
+    *"Lock") hyprlock ;;
+    *"Logout") hyprctl dispatch "hl.dsp.exit()" ;;
+    *"Suspend") systemctl suspend ;;
+esac

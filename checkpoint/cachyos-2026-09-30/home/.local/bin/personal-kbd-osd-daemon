@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import select
+import subprocess
+import time
+import os
+
+event_path = '/sys/class/leds/dell::kbd_backlight/brightness_hw_changed'
+brightness_path = '/sys/class/leds/dell::kbd_backlight/brightness'
+if not os.path.exists(event_path) or not os.path.exists(brightness_path):
+    exit(0)
+
+event_file = open(event_path, 'r')
+brightness_file = open(brightness_path, 'r')
+event_file.read() # Consume current content
+
+poll = select.poll()
+poll.register(event_file, select.POLLPRI | select.POLLERR)
+
+while True:
+    events = poll.poll()
+    if events:
+        event_file.seek(0)
+        event_file.read() # Clear the notification
+        brightness_file.seek(0)
+        current = brightness_file.read().strip()
+        subprocess.Popen([
+            'swayosd-client',
+            '--custom-icon', 'keyboard-brightness-symbolic',
+            '--custom-segmented-progress', f"{current}:2"
+        ])

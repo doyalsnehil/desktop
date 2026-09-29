@@ -1,0 +1,13 @@
+[Unit]
+Description=Automatic headphone and audio output routing
+After=pipewire-pulse.service wireplumber.service
+Wants=pipewire-pulse.service wireplumber.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/personal-audio-router
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

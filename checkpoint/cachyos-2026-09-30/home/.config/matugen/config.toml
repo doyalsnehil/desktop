@@ -1,0 +1,19 @@
+[config.wallpaper]
+command = "awww"
+arguments = ["img", ]
+set = true
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "pkill -SIGUSR2 waybar"
+
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty-theme"
+output_path = "~/.config/ghostty/themes/personal"
+post_hook = "pkill -SIGUSR1 ghostty 2>/dev/null || true"
+
+[templates.palette]
+input_path = "~/.config/matugen/templates/palette.json"
+output_path = "~/.config/matugen/generated/palette.json"
+post_hook = "~/.local/bin/personal-theme-apply"

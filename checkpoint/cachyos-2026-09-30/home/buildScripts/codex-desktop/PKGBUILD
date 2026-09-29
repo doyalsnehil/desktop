@@ -1,0 +1,49 @@
+# Maintainer: snehil
+pkgname=openai-desktop-bin
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Official ChatGPT/Codex Desktop client repackaged from deb"
+arch=('x86_64')
+url="https://openai.com"
+license=('custom')
+
+# Common runtime requirements for Electron apps
+depends=(
+    'alsa-lib'
+    'gtk3'
+    'libxss'
+    'nss'
+    'bubblewrap'
+)
+# Automatically extract .deb contents with bsdtar (included in libarchive)
+makedepends=('libarchive')
+
+# Point source directly to your local .deb file
+source=("local://chatgpt_amd64.deb")
+
+# Use 'SKIP' if you do not want to pin hashes, or run `sha256sum chatgpt_amd64.deb` to add it here
+sha256sums=('760a0a98dcc05a40cbd8a36fec1dd7b32733e6a1f2a5285386ae7faf9a6ab033')
+
+prepare() {
+    cd "$srcdir"
+    # Unpack the control and data archives inside the .deb
+    bsdtar -xf "chatgpt_amd64.deb"
+    
+    # Extract the payload (data.tar.xz or data.tar.zst) into a clean payload directory
+    mkdir -p payload
+    if [ -f data.tar.xz ]; then
+        bsdtar -xf data.tar.xz -C payload/
+    elif [ -f data.tar.zst ]; then
+        bsdtar -xf data.tar.zst -C payload/
+    elif [ -f data.tar.gz ]; then
+        bsdtar -xf data.tar.gz -C payload/
+    fi
+}
+
+package() {
+    # Copy the extracted filesystem tree directly into Arch's pkg staging root
+    cp -dr --no-preserve=ownership "$srcdir/payload/"* "$pkgdir/"
+
+    # Fix permissions if the deb shipped with strict root-only modes
+    find "$pkgdir" -type d -exec chmod 755 {} +
+}

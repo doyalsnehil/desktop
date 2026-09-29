@@ -1,0 +1,2 @@
+greetd.service                               disabled disabled
+swayosd-libinput-backend.service             disabled disabled

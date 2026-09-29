@@ -1,0 +1,13 @@
+# Checkpoint verification at capture
+
+- Repository base HEAD: `620e2591e7a51f257333aea91beba8ebe8b4d708`; clean before checkpoint creation.
+- Live and copied Calendar `panels/calendar/Panel.qml`: SHA-256 `616ada7104bf2866e10dd44ac24fbca2d2a791cfa844a5f2443c38abdbba3a58`.
+- Live and copied production `palette.json`: SHA-256 `7d93e7cb2e5816cdc33df4d75173a5c7d542f04e6163ec42216b9c956cc7b8be`.
+- Live Waybar `clock.on-click` is the top-level Quickshell Calendar IPC command. The checkpoint copy matches the live source.
+- `FILE_MANIFEST.tsv`: 269 payload entries at final integrity check. All 258 exact entries and seven generated references matched the live source using SHA-256/byte comparison; four of those entries are verified symlinks. Four sanitized entries intentionally differ: Git identity, VS Code telemetry ID, Fast.com token-like constant, and uosc OpenSubtitles API key. No unexpected mismatch was found.
+- Two deliberate binary payload files are MPV uosc icon/texture fonts; MPV uosc vendor executables and `~/.local/bin/agy` were excluded. Generated references total 8,470 bytes across seven regular files. No media library, cache, package archive, browser state or credential database was copied.
+- Privacy review searched every checkpoint text file for private-key headers, common token prefixes, credential assignments, bearer and URL credentials, email, MAC, UUID, Wi-Fi QR payloads, phone-like patterns and long opaque strings. Findings were manually resolved as placeholders, runtime code, public example values, source URLs, or SHA-256 hashes. The only actual token-like constants encountered in source copies were removed from the checkpoint. High-risk Git, Code, shell, networking, MPV, system and generated classes were inspected.
+- `git diff --cached --check` reports whitespace in copied live source, generated reference, and package-list output. The manifest's own line endings were normalized; remaining warnings are pre-existing bytes intentionally kept exact. No live source was reformatted for this preservation task. `git diff --check` on unstaged changes is clear.
+- Root-only `/etc/sudoers.d/` was not read. The user supplied a filename-only listing showing `10-installer` as the sole entry. [Calamares documents this exact generated filename](https://github.com/calamares/calamares/blob/calamares/src/modules/users/users.conf), and `pacman -Qo` reports no package owner, as expected for installer output. This resolves the custom desktop/DNS rule classification without exposing rule contents. Filename evidence cannot establish that the generated rule was never edited locally.
+
+No live configuration, wallpaper, palette, package or service was modified to produce this checkpoint. No theme was regenerated.

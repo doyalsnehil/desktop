@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+set -u
+
+USER_NAME="snehil"
+USER_UID="1000"
+RUNTIME="/run/user/${USER_UID}"
+INTERNAL_SINK="alsa_output.pci-0000_00_1f.3.analog-stereo"
+
+pactl_user() {
+    runuser -u "$USER_NAME" -- env \
+        XDG_RUNTIME_DIR="$RUNTIME" \
+        PULSE_RUNTIME_PATH="$RUNTIME/pulse" \
+        pactl "$@"
+}
+
+headphones_active() {
+    pactl_user list sinks 2>/dev/null |
+        grep -q '^	Active Port: analog-output-headphones$'
+}
+
+set_internal_route() {
+    local port="$1"
+
+    pactl_user set-default-sink "$INTERNAL_SINK" 2>/dev/null || true
+    pactl_user set-sink-port "$INTERNAL_SINK" "$port" 2>/dev/null || true
+}
+
+move_streams() {
+    local sink="$1"
+
+    pactl_user list short sink-inputs 2>/dev/null |
+        awk '{print $1}' |
+        while read -r id; do
+            [[ -n "$id" ]] &&
+                pactl_user move-sink-input "$id" "$sink" 2>/dev/null || true
+        done
+}
+
+find_bluetooth_sink() {
+    pactl_user list short sinks 2>/dev/null |
+        awk '$2 ~ /^bluez_output\./ {print $2; exit}'
+}
+
+switch_to_bluetooth() {
+    local bluetooth_sink
+
+    bluetooth_sink="$(find_bluetooth_sink)"
+
+    [[ -z "$bluetooth_sink" ]] && return 0
+
+    # Wired headphones always have priority over Bluetooth.
+    if headphones_active; then
+        return 0
+    fi
+
+    pactl_user set-default-sink "$bluetooth_sink" 2>/dev/null || true
+    move_streams "$bluetooth_sink"
+}
+
+restore_best_output() {
+    if headphones_active; then
+        set_internal_route "analog-output-headphones"
+        return
+    fi
+
+    local bluetooth_sink
+    bluetooth_sink="$(find_bluetooth_sink)"
+
+    if [[ -n "$bluetooth_sink" ]]; then
+        pactl_user set-default-sink "$bluetooth_sink" 2>/dev/null || true
+        move_streams "$bluetooth_sink"
+    else
+        set_internal_route "analog-output-speaker"
+    fi
+}
+
+find_headphone_event() {
+    local path name
+
+    for path in /sys/class/input/event*/device; do
+        name="$(cat "$path/name" 2>/dev/null || true)"
+
+        if [[ "$name" == "HDA Intel PCH Headphone Mic" ]]; then
+            printf '/dev/input/%s\n' "${path%/device}"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+monitor_headphones() {
+    local device
+
+    while :; do
+        device="$(find_headphone_event || true)"
+
+        if [[ -n "$device" && -e "$device" ]]; then
+            break
+        fi
+
+        sleep 2
+    done
+
+    stdbuf -oL evtest "$device" 2>/dev/null |
+    while IFS= read -r line; do
+        case "$line" in
+            *"SW_HEADPHONE_INSERT"*value\ 1*)
+                set_internal_route "analog-output-headphones"
+                ;;
+            *"SW_HEADPHONE_INSERT"*value\ 0*)
+                restore_best_output
+                ;;
+        esac
+    done
+}
+
+monitor_bluetooth() {
+    pactl_user subscribe 2>/dev/null |
+    while IFS= read -r line; do
+        case "$line" in
+            *"on sink #"*)
+                sleep 0.5
+                switch_to_bluetooth
+                ;;
+
+            *"on server"*)
+                sleep 0.5
+                restore_best_output
+                ;;
+        esac
+    done
+}
+
+restore_best_output
+
+monitor_headphones &
+monitor_bluetooth &
+
+wait

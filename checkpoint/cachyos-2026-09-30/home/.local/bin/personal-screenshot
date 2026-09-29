@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+geometry="$(slurp)"
+
+[[ -n "$geometry" ]] || exit 0
+
+grim -g "$geometry" - | wl-copy

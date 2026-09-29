@@ -1,0 +1,3 @@
+/home/snehil/.local/share/npm/lib
+└── @openai/codex@0.158.0
+

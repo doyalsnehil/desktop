@@ -1,5 +1,7 @@
 # Current State
 
+**Pre-wipe pause (2026-09-30):** Desktop development is intentionally paused for a Windows 11 + CachyOS reinstall. The configuration checkpoint and restore guide are under [`checkpoint/cachyos-2026-09-30`](../../checkpoint/cachyos-2026-09-30/RESTORE.md). Task 007B's Calendar migration is live but its final regressions and documentation are unfinished; Task 007 and Stage B remain in progress. See the checkpoint's [`WIP_STATE.md`](../../checkpoint/cachyos-2026-09-30/WIP_STATE.md) before resuming.
+
 **Last updated:** 2026-09-28 (Asia/Kolkata)
 
 This is a living summary of the [frozen forensic audit](../audit/SYSTEM_AUDIT.md), observed on 2026-09-26, with later runtime verification noted below. It does not establish that every configured action works. For claim corrections and detailed lifecycle paths, see [Gemini Claim Verification](../audit/GEMINI_CLAIM_VERIFICATION.md) and the [Dependency Graph](../audit/DEPENDENCY_GRAPH.md).

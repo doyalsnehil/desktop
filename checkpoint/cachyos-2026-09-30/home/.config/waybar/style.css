@@ -1,0 +1,124 @@
+@import "colors.css";
+
+* {
+    font-family: "MesloLGS Nerd Font", "JetBrains Mono Nerd Font", sans-serif;
+    font-weight: 600;
+    min-height: 0;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+#custom-arch,
+#workspaces,
+#clock,
+#tray,
+#network,
+#bluetooth,
+#pulseaudio,
+#battery {
+    background-color: @glass;
+    border: 1px solid @border;
+    border-radius: 17px;
+    color: @text;
+    padding: 0 12px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    transition: all 0.2s ease;
+    min-height: 32px;
+}
+
+#custom-arch {
+    color: @accent;
+    font-size: 20px;
+    padding-right: 15px; /* Visual balance for Arch icon shape */
+    padding-left: 13px;
+}
+
+#workspaces {
+    padding: 0 6px;
+}
+
+#workspaces button {
+    color: @muted;
+    background: transparent;
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+    color: @accent;
+}
+
+#workspaces button:hover {
+    color: @text;
+    background: transparent;
+}
+
+#clock {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+#network {
+    font-size: 18px;
+    padding-right: 16px; /* Offset network icon natural left-leaning weight */
+    padding-left: 12px;
+}
+
+#bluetooth {
+    font-size: 18px;
+}
+
+#pulseaudio, #battery {
+    font-size: 14px;
+}
+
+#custom-arch:hover,
+#clock:hover,
+#tray:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#battery:hover {
+    background-color: @surface_raised;
+}
+
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off,
+#pulseaudio.muted {
+    color: @muted;
+}
+
+#bluetooth.connected {
+    color: @accent;
+}
+
+#battery.charging,
+#battery.warning {
+    color: @accent;
+}
+
+#battery.critical {
+    color: @danger;
+}
+
+tooltip {
+    background-color: @glass_strong;
+    border: 1px solid @border;
+    border-radius: 12px;
+    padding: 10px;
+}
+tooltip label {
+    color: @text;
+    font-size: 14px;
+}

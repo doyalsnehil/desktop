@@ -1,0 +1,9 @@
+awesome-terminal-fonts 1.1.0-5
+breeze-icons 6.30.0-1.1
+cantarell-fonts 1:0.311-1
+fontconfig 2:2.18.3-2.1
+noto-fonts 1:2026.09.01-1
+noto-fonts-cjk 20240730-1
+noto-fonts-emoji 1:2.051-1
+papirus-icon-theme 20260801-1
+ttf-meslo-nerd 3.5.1-2

@@ -1,0 +1,5 @@
+marktext-bin
+openai-desktop-bin
+rustdesk
+sddm-astronaut-theme
+visual-studio-code-bin

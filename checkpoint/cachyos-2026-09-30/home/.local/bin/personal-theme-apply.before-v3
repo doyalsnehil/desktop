@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PALETTE="$HOME/.config/matugen/generated/palette.json"
+
+[[ -f "$PALETTE" ]] || exit 0
+
+accent="$(jq -r '.accent // empty' "$PALETTE")"
+outline="$(jq -r '.outline_variant // empty' "$PALETTE")"
+
+[[ -n "$accent" ]] || exit 0
+[[ -n "$outline" ]] || exit 0
+
+accent="${accent#\#}"
+outline="${outline#\#}"
+
+hyprctl keyword general:col.active_border "rgb($accent)" >/dev/null
+hyprctl keyword general:col.inactive_border "rgb($outline)" >/dev/null
+hyprctl keyword general:border_size 1 >/dev/null

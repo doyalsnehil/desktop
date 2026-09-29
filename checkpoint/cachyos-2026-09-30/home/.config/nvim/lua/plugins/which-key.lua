@@ -1,0 +1,23 @@
+return {
+	-- "folke/which-key.nvim",
+	-- event = "VeryLazy",
+	-- opts = {
+	-- 	preset = "modern",
+	-- 	delay = 300,
+	-- 	icons = {
+	-- 		breadcrumb = ">>",
+	-- 		separator = "->",
+	-- 		group = "+",
+	-- 	},
+	-- 	spec = {
+	-- 		{ "<leader>f", group = "Find/Format" },
+	-- 		{ "<leader>g", group = "Git" },
+	-- 		{ "<leader>z", group = "Zen" },
+	-- 		{ "<leader>d", group = "Debug/Database" },
+	-- 		{ "<leader>c", group = "Code" },
+	-- 		{ "<leader>v", group = "LSP" },
+	-- 		{ "<leader>h", group = "Harpoon" },
+	-- 		{ "<leader>s", group = "Split" },
+	-- 	},
+	-- },
+}

@@ -1,0 +1,4 @@
+#!/bin/bash
+sleep 0.1 # Wait for hardware to change the light
+current=$(brightnessctl --device='dell::kbd_backlight' get)
+swayosd-client --custom-icon "keyboard-brightness-symbolic" --custom-segmented-progress "$current:2"

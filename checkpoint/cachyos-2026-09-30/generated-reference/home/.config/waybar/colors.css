@@ -1,0 +1,15 @@
+@define-color bg #141311;
+@define-color surface #211f1d;
+@define-color surface_raised #2b2a27;
+@define-color text #e6e2dd;
+@define-color muted #ccc6b9;
+@define-color accent #ffffff;
+@define-color accent_soft #eee2b9;
+@define-color accent_text #4f482a;
+@define-color border rgba(74, 71, 60, 1);
+@define-color glass rgba(20, 19, 17, 1);
+@define-color glass_strong rgba(43, 42, 39, 1);
+@define-color danger #ffb4ab;
+
+@define-color outline #959084;
+@define-color outline_variant #4a473c;

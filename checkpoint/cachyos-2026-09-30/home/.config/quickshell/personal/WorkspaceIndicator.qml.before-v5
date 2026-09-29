@@ -1,0 +1,225 @@
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Hyprland
+import Quickshell.Wayland
+
+PanelWindow {
+    id: root
+
+    anchors {
+        top: true
+        left: true
+    }
+
+    margins {
+        top: 6
+        left: 12
+    }
+
+    implicitWidth: 274
+    implicitHeight: 32
+
+    color: "transparent"
+    exclusionMode: ExclusionMode.Ignore
+
+    WlrLayershell.layer: WlrLayer.Top
+
+    property int slotWidth: 27
+    property int firstSlotX: 7
+    property int pillWidth: 44
+    property int activeWorkspaceId:
+        Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 1
+
+    property int activeIndex:
+        activeWorkspaceId >= 1 && activeWorkspaceId <= 9
+            ? activeWorkspaceId - 1
+            : -1
+
+    property int hoveredIndex: -1
+
+    property var palette: ({
+        surface: "#1e100c",
+        surface_raised: "#372621",
+        text: "#f9dcd5",
+        muted: "#a78b84",
+        accent: "#ffb59f",
+        accent_soft: "#fc5a26",
+        accent_text: "#000000",
+        outline_variant: "#5b4139"
+    })
+
+    function rgba(hex, alpha) {
+        var h = String(hex).replace("#", "")
+
+        if (h.length !== 6)
+            return Qt.rgba(1, 1, 1, alpha)
+
+        return Qt.rgba(
+            parseInt(h.slice(0, 2), 16) / 255,
+            parseInt(h.slice(2, 4), 16) / 255,
+            parseInt(h.slice(4, 6), 16) / 255,
+            alpha
+        )
+    }
+
+    FileView {
+        id: themeFile
+
+        path: "/home/snehil/.config/matugen/generated/palette.json"
+        watchChanges: true
+        blockLoading: false
+
+        onLoaded: {
+            try {
+                root.palette = JSON.parse(text())
+            } catch (e) {
+                console.log("Workspace theme parse failed:", e)
+            }
+        }
+
+        onFileChanged: reload()
+    }
+
+    Rectangle {
+        id: surface
+
+        anchors.fill: parent
+
+        radius: 16
+        color: root.rgba(root.palette.surface, 0.78)
+
+        border.width: 1
+        border.color: root.rgba(root.palette.outline_variant, 0.55)
+
+        antialiasing: true
+    }
+
+    Rectangle {
+        id: activePill
+
+        visible: root.activeIndex >= 0
+
+        width: root.pillWidth
+        height: 24
+        radius: 12
+
+        y: 4
+
+        x: root.firstSlotX
+           + (root.activeIndex * root.slotWidth)
+           - ((root.pillWidth - root.slotWidth) / 2)
+
+        color: root.rgba(root.palette.accent_soft, 0.92)
+
+        border.width: 1
+        border.color: root.rgba(root.palette.accent, 0.26)
+
+        antialiasing: true
+
+        Behavior on x {
+            NumberAnimation {
+                duration: 260
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 220
+            }
+        }
+    }
+
+    Repeater {
+        model: 9
+
+        delegate: Item {
+            required property int index
+
+            x: root.firstSlotX + (index * root.slotWidth) - 2
+            y: 2
+
+            width: root.slotWidth
+            height: 28
+
+            Rectangle {
+                anchors.centerIn: parent
+
+                width: 22
+                height: 22
+                radius: 11
+
+                color: root.hoveredIndex === index
+                    ? root.rgba(root.palette.surface_raised, 0.85)
+                    : "transparent"
+
+                visible:
+                    root.hoveredIndex === index &&
+                    root.activeIndex !== index
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 140
+                    }
+                }
+            }
+
+            Text {
+                anchors.fill: parent
+
+                text: String(index + 1)
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "JetBrains Mono Nerd Font"
+                font.pixelSize: root.activeIndex === index ? 13 : 10
+                font.weight:
+                    root.activeIndex === index
+                        ? Font.DemiBold
+                        : Font.Normal
+
+                color:
+                    root.activeIndex === index
+                        ? root.palette.accent_text
+                        : root.hoveredIndex === index
+                            ? root.palette.text
+                            : root.palette.muted
+
+                renderType: Text.NativeRendering
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 160
+                    }
+                }
+
+                Behavior on font.pixelSize {
+                    NumberAnimation {
+                        duration: 160
+                        easing.type: Easing.OutCubic
+                    }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+
+                hoverEnabled: true
+
+                cursorShape: Qt.PointingHandCursor
+
+                onEntered:
+                    root.hoveredIndex = index
+
+                onExited:
+                    if (root.hoveredIndex === index)
+                        root.hoveredIndex = -1
+
+                onClicked:
+                    Hyprland.dispatch("workspace " + (index + 1))
+            }
+        }
+    }
+}

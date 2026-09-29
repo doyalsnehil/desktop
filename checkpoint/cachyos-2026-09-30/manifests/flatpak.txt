@@ -1,0 +1,2 @@
+com.rafaelmardojai.Blanket	flathub	0.8.0
+com.stremio.Stremio	flathub	1.2.0

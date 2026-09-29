@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR="$HOME/.local/state/personal-wallpaper"
+STATE_FILE="$STATE_DIR/current"
+
+mkdir -p "$STATE_DIR"
+
+if [[ $# -gt 0 ]]; then
+    image="$1"
+    printf '%s\n' "$image" > "$STATE_FILE"
+elif [[ -f "$STATE_FILE" ]]; then
+    image="$(cat "$STATE_FILE")"
+else
+    image="$HOME/Pictures/wallpapers/test.jpg"
+fi
+
+[[ -f "$image" ]] || {
+    echo "ERROR: Wallpaper does not exist: $image"
+    exit 1
+}
+
+# Kill any stale daemon and start a fresh one.
+# pkill -x awww-daemon 2>/dev/null || true
+sleep 0.2
+
+# nohup awww-daemon >/tmp/awww.log 2>&1 &
+
+# Wait until the daemon's socket becomes available.
+for _ in {1..50}; do
+    if awww query >/dev/null 2>&1; then
+        break
+    fi
+    sleep 0.1
+done
+
+if ! awww query >/dev/null 2>&1; then
+    echo "ERROR: awww-daemon failed to start."
+    cat /tmp/awww.log 2>/dev/null || true
+    exit 1
+fi
+
+echo "Applying wallpaper: $image"
+# awww img "$image"
+
+echo "Generating Matugen palette..."
+matugen image "$image" \
+    --mode dark \
+    --type scheme-content \
+    --source-color-index 0 \
+    --quiet
+
+"$HOME/.local/bin/personal-theme-apply"
+
+pkill -SIGUSR2 waybar 2>/dev/null || true
+
+printf '%s\n' "$image" > "$STATE_FILE"
+
+echo
+echo "===== AWWW STATE ====="
+awww query
+
+echo
+echo "===== PALETTE ====="
+cat "$HOME/.config/matugen/generated/palette.json"

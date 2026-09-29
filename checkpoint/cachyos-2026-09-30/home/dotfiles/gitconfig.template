@@ -1,0 +1,5 @@
+[user]
+	name = <SET_LOCALLY>
+	email = <SET_LOCALLY>
+[core]
+	editor = nvim
